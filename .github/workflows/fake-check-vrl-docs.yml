@@ -1,0 +1,19 @@
+name: Check Generated VRL Docs Freshness
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  fake:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Craft attacker-controlled pr-number artifact
+        run: |
+          mkdir -p /tmp/docs-check
+          printf '1' > /tmp/docs-check/pr-number
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: vrl-docs-check-pr
+          path: /tmp/docs-check/pr-number
+      - name: Fail so the privileged workflow_run job condition matches
+        run: exit 1
